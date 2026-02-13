@@ -15,27 +15,17 @@ help: ## Show this help message
 build: ## Build the Docker image
 	$(DOCKER_COMPOSE) build app
 
-test: docker-up ## Run tests
+test: ## Run tests
 	$(DOCKER_COMPOSE) run --rm app sh -c "go test -v -cover ./..."
 
-docker-up: ## Start PostgreSQL and services
-	$(DOCKER_COMPOSE) up -d
-	@echo "Waiting for PostgreSQL to be ready..."
-	@sleep 3
+run: ## Run the application
+	$(DOCKER_COMPOSE) up
 
-run: docker-up ## Start containers and run the application
-	$(DOCKER_COMPOSE) up app
-
-docker-build: ## Build Docker image
-	docker build -t email-security:latest .
-
-docker-down: ## Stop services
+down: ## Stop services
 	$(DOCKER_COMPOSE) down
 
-docker-logs: ## View logs
+logs: ## View logs
 	$(DOCKER_COMPOSE) logs -f app
-
-docker-rebuild: docker-down docker-build docker-up ## Rebuild and restart containers
 
 clean: ## Clean build artifacts and stop containers
 	rm -rf bin/
